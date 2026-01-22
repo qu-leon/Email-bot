@@ -11,6 +11,7 @@ STATE_FILE = ".email_agent_state.json"
 DEFAULT_PATTERNS = [
     r"not expected to improve with rework",
     r"not expected to improve with (any )?rework",
+    r"additional rework is not expected to improve",
 ]
 
 # Outlook constants for reply verbs
@@ -102,6 +103,11 @@ def already_replied(mail) -> bool:
     return False
 
 
+def subject_is_reply(mail) -> bool:
+    subject = getattr(mail, "Subject", "") or ""
+    return "RE:" in subject.upper()
+
+
 def create_draft_reply(mail) -> None:
     reply = mail.Reply()
     sender_name = mail.SenderName or "there"
@@ -138,6 +144,8 @@ def scan_and_draft(
         if already_processed(state, mail):
             continue
         if already_replied(mail):
+            continue
+        if subject_is_reply(mail):
             continue
         if not body_matches(mail.Body, regexes):
             continue
