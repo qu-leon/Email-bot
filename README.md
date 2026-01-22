@@ -24,7 +24,7 @@ python main.py
 
 ## Behavior
 
-- Scans Inbox for the last 3 days (default)
+- Scans Inbox for the last 24 hours
 - Only unread messages (default)
 - Creates a draft reply with a short acknowledgement
 - Keeps a local state file `.email_agent_state.json` so emails are not processed twice
